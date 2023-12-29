@@ -6,6 +6,7 @@ using namespace std;
 bool match(string::iterator& it, string::iterator& it2);
 bool match2(const string& s1, const string& s2);
 int match3(int x, int y);
+int match4(int x, int y);
 
 string s1, s2;
 int cache[101][101];
@@ -37,13 +38,14 @@ int main() {
 			*/
 			/*
 			if (match2(s1, s2)) ans.push_back(s2);*/
-			if (match3(0, 0)) ans.push_back(s2);
+			//if (match3(0, 0)) ans.push_back(s2);
+			if (match4(0, 0)) ans.push_back(s2);
 		}
 		sort(ans.begin(), ans.end());
 		for (int i = 0; i < ans.size(); i++) cout << ans[i] << "\n";
 	}
 }
-
+//오류
 bool match(string::iterator& it, string::iterator& it2) {
 	//base
 	if (it == s1.end() && it2 == s2.end()) return true;
@@ -82,5 +84,18 @@ int match3(int x, int y) {
 	if (s1[x] == '*')
 		for (int skip = 0; y + skip <= s2.size(); skip++)
 			if(match3(x+1, y+skip)) return ret = 1;
+	return ret = 0;
+}
+
+//동적 계획법 O(n^2)
+int match4(int x, int y) {
+	int& ret = cache[x][y];
+	if (ret != -1) return ret;
+	while (x < s1.size() && y < s2.size() && (s1[x] == s2[y] || s1[x] == '?')) { return ret = match4(x + 1, y + 1); }
+	if (x == s1.size())
+		return ret = (y == s2.size());
+	if (s1[x] == '*') {
+		return ret = (match4(x + 1, y) | (y < s2.size() & match4(x, y + 1)));
+	}
 	return ret = 0;
 }
