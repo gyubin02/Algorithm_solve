@@ -4,7 +4,7 @@
 using namespace std;
 int transfer(const vector<string>& board);
 bool isFinished(vector<string>& board, char turn);
-bool isWin(const vector<string>& board, char symbol);
+char whoWin(const vector<string>& board);
 int canWin(vector<string>& board, char turn);
 
 vector<string> board(3);
@@ -41,50 +41,34 @@ int transfer(const vector<string>& board) {
 }
 
 bool isFinished(vector<string>& board, char turn) {
-	bool ret = false;
+	char ret;
 	for(int i=0;i<3;i++)
 		for(int j=0;j<3;j++)
 			if (board[i][j] == '.') {
 				board[i][j] = turn;
-				ret = isWin(board, turn);
+				ret = whoWin(board);
 				board[i][j] = '.';
-				if (ret)
-					return ret;
+				if (ret == turn)
+					return true;
 			}
-	return ret;
+	return false;
 }
 
-bool isWin(const vector<string>& board, char symbol) {
+char whoWin(const vector<string>& board) {
 	//check rows
-	bool win;
-	for (int i = 0; i < 3; i++) {
-		win = true;
-		for (int j = 0; j < 3; j++)
-			if (board[i][j] != symbol)
-				win = false;
-		if (win) return true;
-	}
+	for (int line = 0; line < 3; line++)
+		if (board[line][0] == board[line][1] && board[line][0] == board[line][2])
+			return board[line][0];
 	//check cols
-	for (int i = 0; i < 3; i++) {
-		win = true;
-		for (int j = 0; j < 3; j++)
-			if (board[j][i] != symbol)
-				win = false;
-		if (win) return true;
-	}
+	for (int line = 0; line < 3; line++)
+		if (board[0][line] == board[1][line] && board[0][line] == board[2][line])
+			return board[0][line];
 	//check diagonal
-	win = true;
-	for (int i = 0; i < 3; i++)
-		if (board[i][i] != symbol)
-			win = false;
-	if (win) return true;
-	win = true;
-	for (int i = 0; i < 3; i++)
-		if (board[i][2 - i] != symbol)
-			win = false;
-	if (win) return true;
-
-	return false;
+	if (board[0][0] == board[1][1] && board[0][0] == board[2][2])
+		return board[0][0];
+	if (board[0][2] == board[1][1] && board[0][2] == board[2][0])
+		return board[0][2];
+	return '@';
 }
 
 int canWin(vector<string>& board, char turn) {
