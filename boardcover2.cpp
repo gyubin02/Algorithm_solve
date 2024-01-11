@@ -1,4 +1,5 @@
 //¹®Á¦ ID : BOARDCOVER2
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -27,8 +28,7 @@ int main() {
 			for (int j = 0; j < W; j++) {
 				char c;
 				cin >> c;
-				if (c == '#') board[i][j] = 1;
-				else board[i][j] = 0;
+				board[i][j] = (c == '#') ? 1 : 0;
 			}
 		vector<string> block(R);
 		for (int i = 0; i < R; i++)
